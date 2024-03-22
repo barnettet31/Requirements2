@@ -8,7 +8,7 @@ and deleting the AD if it does. TO BE CALLED BEFORE OTHER HANDLERS
 #>
 function ActiveDirectoryCheck{
     ## Check for Active Directory 
-    $financeOUExists = Get-ADOrganizationalUnit -Filter {Name -eq "Finance"}
+    $financeOUExists = Get-ADOrganizationalUnit -Filter {Name -eq "Finance"} -SearchBase "DC=consultingfirm,DC=com" -ErrorAction SilentlyContinue
     if($financeOUExists){
         Write-Output "Finance AD Does Not Exist"
         Write-Output "Removing Organizational Unit"
@@ -68,7 +68,7 @@ function ImportAndCreateADUsers {
 
 ActiveDirectoryCheck
 CreateFinanceOU -OUName "Finance" -Domain "consultingfirm,DC=com"
-ImportAndCreateADUsers -CSVPath "" -OUPath "OU=Finance,DC=consultingfirm,DC=com"
+ImportAndCreateADUsers -CSVPath "$PWD/financePersonnel.csv" -OUPath "OU=Finance,DC=consultingfirm,DC=com"
 
 # Requirement for 4... looks like it's getting a user from the active directory and putting it into a txt file. 
 Get-ADUser -Filter * -SearchBase "ou=Finance,dc=consultingfirm,dc=com" -Properties DisplayName,PostalCode,OfficePhone,MobilePhone > .\AdResults.txt
