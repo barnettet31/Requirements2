@@ -50,18 +50,20 @@ function ImportAndCreateADUsers {
 
     $csvData = Import-Csv $CSVPath
     foreach ($user in $csvData) {
-        $firstName = $user.'First Name'
-        $lastName = $user.'Last Name'
-        $displayName = "$firstName $lastName"
-        $postalCode = $user.'Postal Code'
-        $officePhone = $user.'Office Phone'
-        $mobilePhone = $user.'Mobile Phone'
+        $firstName = $user.First_Name
+        $lastName = $user.Last_Name
+        $samAccountName = $user.samAccount
+        $city = $user.City
+        $county = $user.County
+        $postalCode = $user.PostalCode
+        $officePhone = $user.OfficePhone
+        $mobilePhone = $user.MobilePhone
 
-        New-ADUser -Name $displayName -GivenName $firstName -Surname $lastName `
-                   -DisplayName $displayName -SamAccountName $firstName.ToLower() `
-                   -Path $OUPath -AccountPassword (ConvertTo-SecureString "Password123!" -AsPlainText -Force) `
-                   -Enabled $true -ChangePasswordAtLogon $true -PasswordNeverExpires $false `
-                   -OfficePhone $officePhone -MobilePhone $mobilePhone -PostalCode $postalCode
+        # Assuming OUPath is provided in the format "OU=Finance,DC=consultingfirm,DC=com"
+        New-ADUser -Name "$firstName $lastName" -GivenName $firstName -Surname $lastName `
+            -SamAccountName $samAccountName -City $city -County $county -PostalCode $postalCode `
+            -OfficePhone $officePhone -MobilePhone $mobilePhone -Path $OUPath -AccountPassword (ConvertTo-SecureString "Password123!" -AsPlainText -Force) `
+            -Enabled $true -ChangePasswordAtLogon $true -PasswordNeverExpires $false
     }
 }
 
