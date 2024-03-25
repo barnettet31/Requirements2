@@ -66,10 +66,15 @@ function ImportAndCreateADUsers {
     }
 }
 
+try{
 
-ActiveDirectoryCheck
-CreateFinanceOU -OUName "Finance" -Domain "consultingfirm,DC=com"
-ImportAndCreateADUsers -CSVPath "$PWD/financePersonnel.csv" -OUPath "OU=Finance,DC=consultingfirm,DC=com"
-
-# Requirement for 4... looks like it's getting a user from the active directory and putting it into a txt file. 
-Get-ADUser -Filter * -SearchBase "ou=Finance,dc=consultingfirm,dc=com" -Properties DisplayName,PostalCode,OfficePhone,MobilePhone > .\AdResults.txt
+    ActiveDirectoryCheck
+    CreateFinanceOU -OUName "Finance" -Domain "consultingfirm,DC=com"
+    ImportAndCreateADUsers -CSVPath "$PWD/financePersonnel.csv" -OUPath "OU=Finance,DC=consultingfirm,DC=com"
+    
+    # Requirement for 4... looks like it's getting a user from the active directory and putting it into a txt file. 
+    Get-ADUser -Filter * -SearchBase "ou=Finance,dc=consultingfirm,dc=com" -Properties DisplayName,PostalCode,OfficePhone,MobilePhone > .\AdResults.txt
+}
+catch [error]{ 
+    Write-Error "An Error occurred: $_"
+}
