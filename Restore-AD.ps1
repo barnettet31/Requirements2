@@ -12,7 +12,7 @@ function ActiveDirectoryCheck{
     if($financeOUExists){
         Write-Output "Finance AD Does Not Exist"
         Write-Output "Removing Organizational Unit"
-        Remove-ADOrganizationalUnit -Identity 'OU=Finance' -Confirm:$false
+        Remove-ADOrganizationalUnit -Identity 'OU=Finance,DC=consultingfirm,DC=com' -Confirm:$false
     }else{
         Write-Output "Finance AD Does Not Exist"
     }
