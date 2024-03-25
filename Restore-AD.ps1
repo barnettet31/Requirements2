@@ -60,7 +60,7 @@ function ImportAndCreateADUsers {
 
         # Assuming OUPath is provided in the format "OU=Finance,DC=consultingfirm,DC=com"
         New-ADUser -Name "$firstName $lastName" -DisplayName "$firstName $lastName" -GivenName $firstName -Surname $lastName `
-            -SamAccountName $samAccountName -City $city -County $county -PostalCode $postalCode `
+            -SamAccountName $samAccountName -City $city -PostalCode $postalCode `
             -OfficePhone $officePhone -MobilePhone $mobilePhone -Path $OUPath -AccountPassword (ConvertTo-SecureString "Password123!" -AsPlainText -Force) `
             -Enabled $true -ChangePasswordAtLogon $true -PasswordNeverExpires $false
     }
